@@ -56,6 +56,65 @@ static void print_version() {
     exit(EXIT_SUCCESS);
 }
 
+
+/* print_one_roll() - Prints a roll, either just the total or the
+ *                 separate dices.
+ * 
+ * Parameters: 
+ *  - Dice string with which to calculate dice rolls
+ *  - Index to know which roll is computed
+ * Returns: None
+ */
+void print_one_roll(int *dice_nums, int index){
+    int j, k, temp_int, temp_index, temp_total;
+    int* temp_roll;
+
+    if((temp_roll = malloc(sizeof(*temp_roll) * dice_nums[NUM_DICE])) == NULL) {
+        perror("rolldice");
+        exit(EXIT_FAILURE);
+    }
+
+    temp_total = 0;
+    if(print_separate) printf("Roll #%d: (", index + 1);
+    for(j = 0; j < dice_nums[NUM_DICE]; j++) {
+        temp_roll[j] = rolldie(dice_nums[NUM_SIDES]);
+        if(print_separate) printf("%d ", temp_roll[j]);
+        temp_total += temp_roll[j];
+    }
+    for(j = 0; j < dice_nums[NUM_DROP]; j++) {
+        temp_int = SHRT_MAX;
+        for(k = 0; k < dice_nums[NUM_DICE]; k++)
+    	if(temp_int > temp_roll[k]) {
+    	    temp_int = temp_roll[k];
+    	    temp_index = k;
+    	}
+        if(print_separate) printf("- %d ", temp_int);
+        temp_total -= temp_int;
+        temp_roll[temp_index] = SHRT_MAX;
+    }
+    if(print_separate) printf(") ");
+    if(dice_nums[MULTIPLIER] != 1) {
+        if(print_separate) printf("* %d ", dice_nums[MULTIPLIER]);
+        temp_total *= dice_nums[MULTIPLIER];
+    }
+    if(dice_nums[MODIFIER]) {
+        if(print_separate){
+            if (dice_nums[MODIFIER] > 0)
+                printf("+ %d ", dice_nums[MODIFIER]);
+            else
+                printf("- %d ", abs(dice_nums[MODIFIER]));
+    
+        }
+        temp_total += dice_nums[MODIFIER];
+    }
+    if(print_separate) printf("= ");
+    printf("%d ", temp_total);
+    if(print_separate) printf("\n");
+
+    free(temp_roll);
+}
+
+
 /* print_rolls() - Prints the rolls, either just the totals or the
  *                 separate rolls, also.
  * 
@@ -78,42 +137,7 @@ void print_rolls(int *dice_nums) {
     }
 
     for(i = 0; i < dice_nums[NUM_ROLLS]; i++) {
-	temp_total = 0;
-	if(print_separate) printf("Roll #%d: (", i+1);
-	for(j = 0; j < dice_nums[NUM_DICE]; j++) {
-	    temp_roll[j] = rolldie(dice_nums[NUM_SIDES]);
-	    if(print_separate) printf("%d ", temp_roll[j]);
-	    temp_total += temp_roll[j];
-	}
-	for(j = 0; j < dice_nums[NUM_DROP]; j++) {
-	    temp_int = SHRT_MAX;
-	    for(k = 0; k < dice_nums[NUM_DICE]; k++)
-		if(temp_int > temp_roll[k]) {
-		    temp_int = temp_roll[k];
-		    temp_index = k;
-		}
-	    if(print_separate) printf("- %d ", temp_int);
-	    temp_total -= temp_int;
-	    temp_roll[temp_index] = SHRT_MAX;
-	}
-	if(print_separate) printf(") ");
-	if(dice_nums[MULTIPLIER] != 1) {
-	    if(print_separate) printf("* %d ", dice_nums[MULTIPLIER]);
-	    temp_total *= dice_nums[MULTIPLIER];
-	}
-	if(dice_nums[MODIFIER]) {
-	    if(print_separate){
-            if (dice_nums[MODIFIER] > 0)
-                printf("+ %d ", dice_nums[MODIFIER]);
-            else
-                printf("- %d ", abs(dice_nums[MODIFIER]));
-
-        }
-	    temp_total += dice_nums[MODIFIER];
-	}
-	if(print_separate) printf("= ");
-	printf("%d ", temp_total);
-	if(print_separate) printf("\n");
+        print_one_roll(dice_nums, i);
     }
     if(!print_separate) printf("\n");
 }
