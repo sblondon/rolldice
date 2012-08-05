@@ -62,6 +62,6 @@
 typedef enum {UNDEF, URANDOM, RANDOM} rand_type;
 
 // External function declarations for using rolldice() and kin.
-extern int *parse_string(char *dice_string);
-extern int rolldie(int num_sides);
-extern void init_random(rand_type rand_file);
+extern int *parse_string(const char const *dice_string);
+extern int rolldie(const int num_sides);
+extern void init_random(const rand_type rand_file);
