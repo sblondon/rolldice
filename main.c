@@ -122,18 +122,12 @@ void print_one_roll(int *dice_nums, int index){
  * Returns: None
  */
 void print_rolls(int *dice_nums) {
-    int i, j, k, temp_int, temp_index, temp_total;
-    int* temp_roll;
+    int i;
     
     if(dice_nums == NULL) {
         fprintf(stderr, "Problems with the dice string, either malformed "
 			"or numbers are too large,\nso quitting!\n");
         exit(EXIT_FAILURE);
-    }
-    
-    if((temp_roll = malloc(sizeof(*temp_roll) * dice_nums[NUM_DICE])) == NULL) {
-        perror("rolldice");
-	exit(EXIT_FAILURE);
     }
 
     for(i = 0; i < dice_nums[NUM_ROLLS]; i++) {
