@@ -10,6 +10,18 @@
 
 #include "rolldice.h"
 
+
+/* The following #defines give the tokens for each part of the format
+ * string.
+ */
+#define ROLL_IDENT 'x'
+#define DICE_SIDES_IDENT 'd'
+#define MULTI_IDENT '*'
+#define MOD_PLUS_IDENT '+'
+#define MOD_MINUS_IDENT '-'
+#define DROP_IDENT 's'
+
+
 // File pointer for random device
 static FILE* ran_dev;
 
@@ -86,7 +98,7 @@ int *parse_string(const char const *dice_string) {
 	}
 	else {
 	    switch(*dice_string) {
-	    case 'd':
+	    case DICE_SIDES_IDENT:
             dice_nums[NUM_DICE] = get_num_dice(temp_int, DEFAULT_NUM_DICE);
             dice_string++;
             res_int = get_num_sides(dice_string, temp_int, res_int);
@@ -97,7 +109,7 @@ int *parse_string(const char const *dice_string) {
                 dice_nums[NUM_SIDES] = *res_int;
             }
             break;
-	    case 's':
+	    case DROP_IDENT:
             dice_string++;
             res_int = get_num_drop(dice_string, temp_int, res_int);
             if (res_int == NULL){
@@ -107,7 +119,7 @@ int *parse_string(const char const *dice_string) {
                 dice_nums[NUM_DROP] = *res_int;
             }
 		    break;
-	    case 'x':
+	    case ROLL_IDENT:
             dice_string++;
             res_int = get_num_rolls(temp_int, res_int);
             if (res_int == NULL){
@@ -117,7 +129,7 @@ int *parse_string(const char const *dice_string) {
                 dice_nums[NUM_ROLLS] = *res_int;
             }
             break;
-	    case '*':
+	    case MULTI_IDENT:
             dice_string++;
             res_int = get_mutiplier(dice_string, temp_int, res_int);
             if (res_int == NULL){
@@ -127,7 +139,7 @@ int *parse_string(const char const *dice_string) {
                 dice_nums[MULTIPLIER] = *res_int;
             }
             break;
-	    case '+':
+	    case MOD_PLUS_IDENT:
             dice_string++;
             res_int = get_plus_modifier(dice_string, temp_int, res_int);
             if (res_int == NULL){
@@ -137,7 +149,7 @@ int *parse_string(const char const *dice_string) {
                 dice_nums[MODIFIER] = *res_int;
             }
             break;
-	    case '-':
+	    case MOD_MINUS_IDENT:
             dice_string++;
             res_int = get_minus_modifier(dice_string, temp_int, res_int);
             if (res_int == NULL){

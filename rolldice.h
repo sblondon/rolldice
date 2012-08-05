@@ -24,9 +24,6 @@
 /* For the rand() and srand() functions */
 #include <math.h>
 
-/* For the strstr() function */
-#include <string.h>
-
 /* For some bounds */
 #include <limits.h>
 
@@ -43,20 +40,6 @@
 #define NUM_DROP 5
 #define DICE_ARRAY_SIZE 6
 
-/* The following #defines give the tokens for each part of the format
- * string.  Perhaps eventually I'll change parse_string to use strtok()
- * instead of strstr() :)
- */
-#define ROLL_IDENT "x"
-#define DICE_SIDES_IDENT "d"
-#define MULTI_IDENT "*"
-#define MOD_PLUS_IDENT "+"
-#define MOD_MINUS_IDENT "-"
-#define DROP_IDENT "s"
-
-// Defines values for true and false, just for testing stuff boolean-wise :)
-#define TRUE_VAL 1
-#define FALSE_VAL 0
 
 // Defines values for the random number file to use
 typedef enum {UNDEF, URANDOM, RANDOM} rand_type;
